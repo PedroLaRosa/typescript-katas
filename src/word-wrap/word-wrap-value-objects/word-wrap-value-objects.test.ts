@@ -66,7 +66,7 @@ class WrappableText {
     const earlyEndOfWrap = width.getValue() - charsToRemove - 1;
     return charsToRemove > 0 ? earlyEndOfWrap : width.getValue();
   }
-  wrappedText(width: ColumnWidth) {
+  #wrappedText(width: ColumnWidth) {
     return WrappableText.create(
       this.getValue().substring(0, this.#wrapIndex(width)).trim().concat("\n"),
     );
@@ -81,7 +81,7 @@ class WrappableText {
       .trim().length;
     return width.getValue() - charsToRemove;
   }
-  unwrappedText(width: ColumnWidth) {
+  #unwrappedText(width: ColumnWidth) {
     return WrappableText.create(
       this.getValue().substring(this.#unwrapIndex(width)).trim(),
     );
@@ -105,28 +105,22 @@ class WrappableText {
   getValue() {
     return this.text;
   }
+
+  wrap(width: ColumnWidth): WrappableText {
+    const widthValue = width.getValue();
+
+    if (widthValue === 0) return WrappableText.create(this.getValue());
+    if (this.isFittingIn(width)) return WrappableText.create(this.getValue());
+
+    const stringHead = this.#wrappedText(width);
+    const stringTail = this.#unwrappedText(width);
+
+    return stringHead.concat(stringTail.wrap(width));
+  }
 }
 
 function wordWrap(text: string, width: number): string {
-  return wordWrapNoPrimitives(
-    WrappableText.create(text),
-    ColumnWidth.create(width),
-  ).getValue();
-}
-
-function wordWrapNoPrimitives(
-  text: WrappableText,
-  width: ColumnWidth,
-): WrappableText {
-  const widthValue = width.getValue();
-
-  if (widthValue === 0) return WrappableText.create(text.getValue());
-  if (text.isFittingIn(width)) return WrappableText.create(text.getValue());
-
-  const stringHead = text.wrappedText(width);
-  const stringTail = text.unwrappedText(width);
-
-  return stringHead.concat(wordWrapNoPrimitives(stringTail, width));
+  return WrappableText.create(text).wrap(ColumnWidth.create(width)).getValue();
 }
 
 describe("Testing word wrap function", () => {
