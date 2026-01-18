@@ -1,6 +1,6 @@
 import { Transaction } from "./transaction.js";
 
-class TransationRepository {
+class TransactionRepository {
   #transactions: Transaction[] = [];
 
   addDeposit(amount: number): void {
@@ -33,8 +33,8 @@ class TransationRepository {
     // include the internal data value defined in the implementation of the class.
     // That is the reason there is a need to have to be transformed the transactions into a list of structured objects
     // so any test runner can compare the structure of the data
-    return this.#transactions.map((transaction) => transaction.getData());
+    return this.#transactions.map((transaction) => transaction);
   }
 }
 
-export { TransationRepository };
+export { TransactionRepository };

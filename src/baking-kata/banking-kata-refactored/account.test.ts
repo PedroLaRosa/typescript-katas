@@ -1,18 +1,20 @@
 import { describe, expect, it, vi } from "vitest";
-import { TransationRepository } from "./transaction-repository.js";
+import { TransactionRepository } from "./transaction-repository.js";
 import { Account } from "./account.js";
+import { StatementPrinter } from "./statement-printer.js";
 
 describe("Testing account class", () => {
   it("Should print statement", () => {
     vi.useFakeTimers();
 
-    const transationRepository = new TransationRepository();
+    const transationRepository = new TransactionRepository();
     // Tip: You can use any logger to record the statement.
     // It's also possible to spy on the console.log method with vi.spyOn.
     // However, this does not replace the original function implementation.
     // While it works effectively, it can clutter the test messages.
     const logger = { log: vi.fn() };
-    const account = new Account(transationRepository, logger);
+    const statementPrinter = new StatementPrinter(logger, "es-ES");
+    const account = new Account(transationRepository, statementPrinter);
 
     vi.setSystemTime(new Date("2025-08-24T00:00:00.00Z"));
     account.deposit(500);
