@@ -26,7 +26,13 @@ class Account {
   }
 
   withdraw(amount: number) {
-    // TODO: Pending to implement
+    const lastTransaction = this.transactions.at(-1);
+    this.transactions.push(
+      Transaction.create(
+        amount * -1,
+        (lastTransaction?.totalSnapshot ?? 0) + amount * -1,
+      ),
+    );
   }
 
   #formatDate(timestamp: number) {
@@ -41,11 +47,26 @@ class Account {
     );
   }
 
+  #formatDecimal(
+    amount: number,
+    options: { hasPositiveSign: boolean } = { hasPositiveSign: false },
+  ) {
+    const numberOptions = {
+      minimumFractionDigits: 0, // Ensure at least two decimal places
+      maximumFractionDigits: 2, // Ensure no more than two decimal places
+      signDisplay: options.hasPositiveSign ? "always" : "negative",
+    } as const;
+
+    const decimalFormat = new Intl.NumberFormat("es-ES", numberOptions);
+
+    return decimalFormat.format(amount);
+  }
+
   printStatement() {
     const formattedStatement = this.transactions
       .map(
         (t) =>
-          `${this.#formatDate(t.timestamp)} | +${t.amount} | ${t.totalSnapshot}`,
+          `${this.#formatDate(t.timestamp)} | ${this.#formatDecimal(t.amount, { hasPositiveSign: true })} | ${this.#formatDecimal(t.totalSnapshot)}`,
       )
       .toReversed();
 
