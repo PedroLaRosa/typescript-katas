@@ -75,4 +75,26 @@ describe("Testing Account class", () => {
       ].join("\n"),
     );
   });
+
+  it("should add withdrawal", () => {
+    vi.useFakeTimers();
+    vi.spyOn(console, "log");
+    const account = new Account();
+
+    vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
+    account.withdraw(200);
+
+    vi.setSystemTime(new Date("2026-01-20T00:00:00.00Z"));
+    account.withdraw(600);
+
+    account.printStatement();
+
+    expect(console.log).toHaveBeenLastCalledWith(
+      [
+        "Date | Amount | Balance",
+        "20/01/2026 | -600 | -800",
+        "19/01/2026 | -200 | -200",
+      ].join("\n"),
+    );
+  });
 });
