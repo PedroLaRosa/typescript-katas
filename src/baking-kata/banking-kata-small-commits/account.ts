@@ -1,36 +1,15 @@
-class Transaction {
-  private constructor(
-    public timestamp: number,
-    public amount: number,
-    public totalSnapshot: number,
-  ) {}
-
-  static create(amount: number, totalSnapshot: number) {
-    return new Transaction(Date.now(), amount, totalSnapshot);
-  }
-}
+import type { TransactionRepository } from "./TransactionRepository.js";
 
 class Account {
   header = "Date | Amount | Balance";
-  transactions: Transaction[] = [];
+  constructor(private transactionRepository: TransactionRepository) {}
   deposit(amount: number) {
-    const lastTransaction = this.transactions.at(-1);
-    this.transactions.push(
-      Transaction.create(
-        amount,
-        (lastTransaction?.totalSnapshot ?? 0) + amount,
-      ),
-    );
+    this.transactionRepository.addTransaction(amount);
   }
 
   withdraw(amount: number) {
-    const lastTransaction = this.transactions.at(-1);
-    this.transactions.push(
-      Transaction.create(
-        amount * -1,
-        (lastTransaction?.totalSnapshot ?? 0) + amount * -1,
-      ),
-    );
+    const amountToSubtract = amount * -1;
+    this.transactionRepository.addTransaction(amountToSubtract);
   }
 
   #formatDate(timestamp: number) {
@@ -61,7 +40,8 @@ class Account {
   }
 
   printStatement() {
-    const formattedStatement = this.transactions
+    const formattedStatement = this.transactionRepository
+      .getAllTransactions()
       .map(
         (t) =>
           `${this.#formatDate(t.timestamp)} | ${this.#formatDecimal(t.amount, { hasPositiveSign: true })} | ${this.#formatDecimal(t.totalSnapshot)}`,

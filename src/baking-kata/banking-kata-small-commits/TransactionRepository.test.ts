@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
+import { TransactionRepository } from "./TransactionRepository.js";
+import { Transaction } from "./transaction.js";
 
 describe("Testing transaction repository class", () => {
-  it("Should create a transaction", () => {
+  it("Should create transactions", () => {
     vi.useFakeTimers();
     const transactionRepository = new TransactionRepository();
 

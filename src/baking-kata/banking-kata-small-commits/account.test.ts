@@ -1,11 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { Account } from "./account.js";
+import { TransactionRepository } from "./TransactionRepository.js";
 
 describe("Testing Account class", () => {
   it("should add a deposit", () => {
     vi.useFakeTimers();
     vi.spyOn(console, "log");
-    const account = new Account();
+    const transactionRepository = new TransactionRepository();
+    const account = new Account(transactionRepository);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
     account.deposit(500);
@@ -27,7 +29,9 @@ describe("Testing Account class", () => {
   it("should add withdrawal", () => {
     vi.useFakeTimers();
     vi.spyOn(console, "log");
-    const account = new Account();
+
+    const transactionRepository = new TransactionRepository();
+    const account = new Account(transactionRepository);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
     account.withdraw(200);
@@ -49,7 +53,9 @@ describe("Testing Account class", () => {
   it("should print a mix of withdrawal and deposit", () => {
     vi.useFakeTimers();
     vi.spyOn(console, "log");
-    const account = new Account();
+
+    const transactionRepository = new TransactionRepository();
+    const account = new Account(transactionRepository);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
     account.deposit(300);
