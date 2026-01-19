@@ -118,4 +118,30 @@ describe("Testing Account class", () => {
       ].join("\n"),
     );
   });
+
+  it("should print a mix of withdrawal and deposit", () => {
+    vi.useFakeTimers();
+    vi.spyOn(console, "log");
+    const account = new Account();
+
+    vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
+    account.deposit(300);
+
+    vi.setSystemTime(new Date("2026-01-20T00:00:00.00Z"));
+    account.withdraw(600);
+
+    vi.setSystemTime(new Date("2026-01-21T00:00:00.00Z"));
+    account.deposit(1100);
+
+    account.printStatement();
+
+    expect(console.log).toHaveBeenLastCalledWith(
+      [
+        "Date | Amount | Balance",
+        "21/01/2026 | +1100 | 800",
+        "20/01/2026 | -600 | -300",
+        "19/01/2026 | +300 | 300",
+      ].join("\n"),
+    );
+  });
 });
