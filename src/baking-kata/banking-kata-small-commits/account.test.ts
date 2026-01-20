@@ -92,4 +92,34 @@ describe("Testing Account class", () => {
       ].join("\n"),
     );
   });
+
+  it("Should throw error when passing a negative amount to deposit", () => {
+    const transactionRepository = new TransactionRepository();
+
+    // Tip: spying on console.log is not ideal because even if the test passes
+    // and everything keeps working fine. The logs are printing out in the console
+    // adding noise to the test output.
+    const logger = { log: vi.fn() };
+    const printStatement = new StatementPrinter(logger, "es-ES");
+    const account = new Account(transactionRepository, printStatement);
+
+    expect(() => {
+      account.deposit(-1);
+    }).toThrow();
+  });
+
+  it("Should throw error when passing a negative amount to withdraw", () => {
+    const transactionRepository = new TransactionRepository();
+
+    // Tip: spying on console.log is not ideal because even if the test passes
+    // and everything keeps working fine. The logs are printing out in the console
+    // adding noise to the test output.
+    const logger = { log: vi.fn() };
+    const printStatement = new StatementPrinter(logger, "es-ES");
+    const account = new Account(transactionRepository, printStatement);
+
+    expect(() => {
+      account.withdraw(-1);
+    }).toThrow();
+  });
 });
