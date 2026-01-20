@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { TransactionRepository } from "./TransactionRepository.js";
-import { PrintStatement } from "./print-statement.js";
+import { StatementPrinter } from "./statement-printer.js";
 
 describe("PrintStatement class", () => {
   it("should print the statement properly and well formatted", () => {
     vi.useFakeTimers();
     vi.spyOn(console, "log");
     const transactionRepository = new TransactionRepository();
-    const printStatement = new PrintStatement();
+    const printStatement = new StatementPrinter();
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
     transactionRepository.addTransaction(500);

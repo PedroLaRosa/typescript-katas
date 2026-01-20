@@ -1,6 +1,6 @@
 import type { Transaction } from "./transaction.js";
 
-class PrintStatement {
+class StatementPrinter {
   private header = "Date | Amount | Balance";
 
   private formatDate(timestamp: number) {
@@ -42,4 +42,4 @@ class PrintStatement {
   }
 }
 
-export { PrintStatement };
+export { StatementPrinter };
