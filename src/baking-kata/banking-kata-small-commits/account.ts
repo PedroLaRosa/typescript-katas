@@ -8,13 +8,11 @@ class Account {
   ) {}
 
   deposit(amount: number) {
-    this.transactionRepository.addTransaction(amount);
+    this.transactionRepository.addDeposit(amount);
   }
 
   withdraw(amount: number) {
-    const amountToSubtract = amount * -1;
-
-    this.transactionRepository.addTransaction(amountToSubtract);
+    this.transactionRepository.addWithdrawal(amount);
   }
 
   printStatement() {
