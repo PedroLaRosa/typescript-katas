@@ -14,13 +14,13 @@ describe("PrintStatement class", () => {
     const printStatement = new StatementPrinter(logger, "es-ES");
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
-    transactionRepository.addTransaction(500);
+    transactionRepository.addDeposit(500);
 
     vi.setSystemTime(new Date("2026-01-20T00:00:00.00Z"));
-    transactionRepository.addTransaction(-600);
+    transactionRepository.addWithdrawal(600);
 
     vi.setSystemTime(new Date("2026-01-21T00:00:00.00Z"));
-    transactionRepository.addTransaction(300);
+    transactionRepository.addDeposit(300);
 
     printStatement.print(transactionRepository.getAllTransactions());
 
@@ -45,13 +45,13 @@ describe("PrintStatement class", () => {
     const printStatement = new StatementPrinter(logger, "en-US");
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
-    transactionRepository.addTransaction(500);
+    transactionRepository.addDeposit(500);
 
     vi.setSystemTime(new Date("2026-01-20T00:00:00.00Z"));
-    transactionRepository.addTransaction(-600);
+    transactionRepository.addWithdrawal(600);
 
     vi.setSystemTime(new Date("2026-01-21T00:00:00.00Z"));
-    transactionRepository.addTransaction(300);
+    transactionRepository.addDeposit(300);
 
     printStatement.print(transactionRepository.getAllTransactions());
 

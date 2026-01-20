@@ -12,16 +12,23 @@ class TransactionRepository {
     );
   }
 
+  private expectPositiveNumber = (amount: number) => {
+    if (amount < 0) throw new Error("amount must be positive");
+  };
+
   public addDeposit(amount: number) {
+    this.expectPositiveNumber(amount);
     this.addTransaction(amount);
   }
 
   public addWithdrawal(amount: number) {
+    this.expectPositiveNumber(amount);
+
     const negativeAmount = amount * -1;
     this.addTransaction(negativeAmount);
   }
 
-  getAllTransactions() {
+  public getAllTransactions() {
     return this.transactions;
   }
 }

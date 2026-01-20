@@ -6,7 +6,6 @@ import { StatementPrinter } from "./statement-printer.js";
 describe("Testing Account class", () => {
   it("should add a deposit", () => {
     vi.useFakeTimers();
-    vi.spyOn(console, "log");
     const transactionRepository = new TransactionRepository();
     // Tip: spying on console.log is not ideal because even if the test passes
     // and everything keeps working fine. The logs are printing out in the console
@@ -34,7 +33,6 @@ describe("Testing Account class", () => {
 
   it("should add withdrawal", () => {
     vi.useFakeTimers();
-    vi.spyOn(console, "log");
 
     const transactionRepository = new TransactionRepository();
 
