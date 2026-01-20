@@ -1,7 +1,13 @@
 import type { Transaction } from "./transaction.js";
 
+interface Logger {
+  log: (...args: unknown[]) => void;
+}
+
 class StatementPrinter {
   private header = "Date | Amount | Balance";
+
+  constructor(private logger: Logger) {}
 
   private formatDate(timestamp: number) {
     const dateTimeOptions = {
@@ -38,7 +44,7 @@ class StatementPrinter {
       )
       .toReversed();
 
-    console.log([this.header, ...formattedStatement].join("\n"));
+    this.logger.log([this.header, ...formattedStatement].join("\n"));
   }
 }
 

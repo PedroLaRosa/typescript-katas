@@ -5,9 +5,13 @@ import { StatementPrinter } from "./statement-printer.js";
 describe("PrintStatement class", () => {
   it("should print the statement properly and well formatted", () => {
     vi.useFakeTimers();
-    vi.spyOn(console, "log");
+
+    // Tip: spying on console.log is not ideal because even if the test passes
+    // and everything keeps working fine. The logs are printing out in the console
+    // adding noise to the test output.
+    const logger = { log: vi.fn() };
     const transactionRepository = new TransactionRepository();
-    const printStatement = new StatementPrinter();
+    const printStatement = new StatementPrinter(logger);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
     transactionRepository.addTransaction(500);
@@ -20,7 +24,7 @@ describe("PrintStatement class", () => {
 
     printStatement.print(transactionRepository.getAllTransactions());
 
-    expect(console.log).toHaveBeenLastCalledWith(
+    expect(logger.log).toHaveBeenLastCalledWith(
       [
         "Date | Amount | Balance",
         "21/01/2026 | +300 | 200",

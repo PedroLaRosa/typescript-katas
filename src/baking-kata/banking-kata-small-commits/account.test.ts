@@ -8,7 +8,11 @@ describe("Testing Account class", () => {
     vi.useFakeTimers();
     vi.spyOn(console, "log");
     const transactionRepository = new TransactionRepository();
-    const printStatement = new StatementPrinter();
+    // Tip: spying on console.log is not ideal because even if the test passes
+    // and everything keeps working fine. The logs are printing out in the console
+    // adding noise to the test output.
+    const logger = { log: vi.fn() };
+    const printStatement = new StatementPrinter(logger);
     const account = new Account(transactionRepository, printStatement);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
@@ -19,7 +23,7 @@ describe("Testing Account class", () => {
 
     account.printStatement();
 
-    expect(console.log).toHaveBeenLastCalledWith(
+    expect(logger.log).toHaveBeenLastCalledWith(
       [
         "Date | Amount | Balance",
         "20/01/2026 | +700 | 1200",
@@ -33,7 +37,12 @@ describe("Testing Account class", () => {
     vi.spyOn(console, "log");
 
     const transactionRepository = new TransactionRepository();
-    const printStatement = new StatementPrinter();
+
+    // Tip: spying on console.log is not ideal because even if the test passes
+    // and everything keeps working fine. The logs are printing out in the console
+    // adding noise to the test output.
+    const logger = { log: vi.fn() };
+    const printStatement = new StatementPrinter(logger);
     const account = new Account(transactionRepository, printStatement);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
@@ -44,7 +53,7 @@ describe("Testing Account class", () => {
 
     account.printStatement();
 
-    expect(console.log).toHaveBeenLastCalledWith(
+    expect(logger.log).toHaveBeenLastCalledWith(
       [
         "Date | Amount | Balance",
         "20/01/2026 | -600 | -800",
@@ -55,10 +64,14 @@ describe("Testing Account class", () => {
 
   it("should print a mix of withdrawal and deposit", () => {
     vi.useFakeTimers();
-    vi.spyOn(console, "log");
 
     const transactionRepository = new TransactionRepository();
-    const printStatement = new StatementPrinter();
+
+    // Tip: spying on console.log is not ideal because even if the test passes
+    // and everything keeps working fine. The logs are printing out in the console
+    // adding noise to the test output.
+    const logger = { log: vi.fn() };
+    const printStatement = new StatementPrinter(logger);
     const account = new Account(transactionRepository, printStatement);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
@@ -72,7 +85,7 @@ describe("Testing Account class", () => {
 
     account.printStatement();
 
-    expect(console.log).toHaveBeenLastCalledWith(
+    expect(logger.log).toHaveBeenLastCalledWith(
       [
         "Date | Amount | Balance",
         "21/01/2026 | +1100 | 800",
