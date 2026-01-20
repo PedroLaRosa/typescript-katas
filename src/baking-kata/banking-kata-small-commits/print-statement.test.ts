@@ -1,12 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { TransactionRepository } from "./TransactionRepository.js";
-import type { Transaction } from "./transaction.js";
-
-class PrintStatement {
-  print(transactions: Transaction[]) {
-    // TODO: pending to implement
-  }
-}
+import { PrintStatement } from "./print-statement.js";
 
 describe("PrintStatement class", () => {
   it("should print the statement properly and well formatted", () => {
