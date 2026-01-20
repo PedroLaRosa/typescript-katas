@@ -12,7 +12,7 @@ describe("Testing Account class", () => {
     // and everything keeps working fine. The logs are printing out in the console
     // adding noise to the test output.
     const logger = { log: vi.fn() };
-    const printStatement = new StatementPrinter(logger);
+    const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
@@ -42,7 +42,7 @@ describe("Testing Account class", () => {
     // and everything keeps working fine. The logs are printing out in the console
     // adding noise to the test output.
     const logger = { log: vi.fn() };
-    const printStatement = new StatementPrinter(logger);
+    const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
@@ -71,7 +71,7 @@ describe("Testing Account class", () => {
     // and everything keeps working fine. The logs are printing out in the console
     // adding noise to the test output.
     const logger = { log: vi.fn() };
-    const printStatement = new StatementPrinter(logger);
+    const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));

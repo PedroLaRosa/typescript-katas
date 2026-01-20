@@ -7,7 +7,10 @@ interface Logger {
 class StatementPrinter {
   private header = "Date | Amount | Balance";
 
-  constructor(private logger: Logger) {}
+  constructor(
+    private logger: Logger,
+    private locale: string,
+  ) {}
 
   private formatDate(timestamp: number) {
     const dateTimeOptions = {
@@ -16,7 +19,7 @@ class StatementPrinter {
       month: "2-digit",
     } as const;
 
-    return new Intl.DateTimeFormat("es-ES", dateTimeOptions).format(
+    return new Intl.DateTimeFormat(this.locale, dateTimeOptions).format(
       new Date(timestamp),
     );
   }
@@ -31,7 +34,7 @@ class StatementPrinter {
       signDisplay: options.hasPositiveSign ? "always" : "negative",
     } as const;
 
-    const decimalFormat = new Intl.NumberFormat("es-ES", numberOptions);
+    const decimalFormat = new Intl.NumberFormat(this.locale, numberOptions);
 
     return decimalFormat.format(amount);
   }
