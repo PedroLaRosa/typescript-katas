@@ -1,10 +1,14 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { TransactionRepository } from "./TransactionRepository.js";
 import { Transaction } from "./transaction.js";
 
 describe("Testing transaction repository class", () => {
-  it("Should create deposit transations", () => {
+  beforeEach(() => {
     vi.useFakeTimers();
+    vi.resetAllMocks();
+  });
+
+  it("Should create deposit transations", () => {
     const transactionRepository = new TransactionRepository();
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
@@ -22,7 +26,6 @@ describe("Testing transaction repository class", () => {
   });
 
   it("Should create withdrawal transation", () => {
-    vi.useFakeTimers();
     const transactionRepository = new TransactionRepository();
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));
@@ -40,7 +43,6 @@ describe("Testing transaction repository class", () => {
   });
 
   it("Should create both deposit and withdrawal transation", () => {
-    vi.useFakeTimers();
     const transactionRepository = new TransactionRepository();
 
     vi.setSystemTime(new Date("2026-01-19T00:00:00.00Z"));

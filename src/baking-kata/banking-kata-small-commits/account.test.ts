@@ -1,16 +1,21 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Account } from "./account.js";
 import { TransactionRepository } from "./TransactionRepository.js";
 import { StatementPrinter } from "./statement-printer.js";
 
 describe("Testing Account class", () => {
-  it("should add a deposit", () => {
+  // Tip: spying on console.log is not ideal because even if the test passes
+  // and everything keeps working fine. The logs are printing out in the console
+  // adding noise to the test output.
+  let logger = { log: vi.fn() };
+
+  beforeEach(() => {
     vi.useFakeTimers();
+    vi.resetAllMocks();
+  });
+
+  it("should add a deposit", () => {
     const transactionRepository = new TransactionRepository();
-    // Tip: spying on console.log is not ideal because even if the test passes
-    // and everything keeps working fine. The logs are printing out in the console
-    // adding noise to the test output.
-    const logger = { log: vi.fn() };
     const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);
 
@@ -32,14 +37,8 @@ describe("Testing Account class", () => {
   });
 
   it("should add withdrawal", () => {
-    vi.useFakeTimers();
-
     const transactionRepository = new TransactionRepository();
 
-    // Tip: spying on console.log is not ideal because even if the test passes
-    // and everything keeps working fine. The logs are printing out in the console
-    // adding noise to the test output.
-    const logger = { log: vi.fn() };
     const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);
 
@@ -61,14 +60,7 @@ describe("Testing Account class", () => {
   });
 
   it("should print a mix of withdrawal and deposit", () => {
-    vi.useFakeTimers();
-
     const transactionRepository = new TransactionRepository();
-
-    // Tip: spying on console.log is not ideal because even if the test passes
-    // and everything keeps working fine. The logs are printing out in the console
-    // adding noise to the test output.
-    const logger = { log: vi.fn() };
     const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);
 
@@ -95,11 +87,6 @@ describe("Testing Account class", () => {
 
   it("Should throw error when passing a negative amount to deposit", () => {
     const transactionRepository = new TransactionRepository();
-
-    // Tip: spying on console.log is not ideal because even if the test passes
-    // and everything keeps working fine. The logs are printing out in the console
-    // adding noise to the test output.
-    const logger = { log: vi.fn() };
     const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);
 
@@ -110,10 +97,6 @@ describe("Testing Account class", () => {
 
   it("Should throw error when passing a negative amount to withdraw", () => {
     const transactionRepository = new TransactionRepository();
-
-    // Tip: spying on console.log is not ideal because even if the test passes
-    // and everything keeps working fine. The logs are printing out in the console
-    // adding noise to the test output.
     const logger = { log: vi.fn() };
     const printStatement = new StatementPrinter(logger, "es-ES");
     const account = new Account(transactionRepository, printStatement);

@@ -1,14 +1,14 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { TransactionRepository } from "./TransactionRepository.js";
 import { StatementPrinter } from "./statement-printer.js";
 
 describe("PrintStatement class", () => {
-  it("should print the statement properly and well formatted in es-ES", () => {
+  beforeEach(() => {
     vi.useFakeTimers();
+    vi.resetAllMocks();
+  });
 
-    // Tip: spying on console.log is not ideal because even if the test passes
-    // and everything keeps working fine. The logs are printing out in the console
-    // adding noise to the test output.
+  it("should print the statement properly and well formatted in es-ES", () => {
     const logger = { log: vi.fn() };
     const transactionRepository = new TransactionRepository();
     const printStatement = new StatementPrinter(logger, "es-ES");
@@ -35,11 +35,6 @@ describe("PrintStatement class", () => {
   });
 
   it("should print the statement properly and well formatted in en-US", () => {
-    vi.useFakeTimers();
-
-    // Tip: spying on console.log is not ideal because even if the test passes
-    // and everything keeps working fine. The logs are printing out in the console
-    // adding noise to the test output.
     const logger = { log: vi.fn() };
     const transactionRepository = new TransactionRepository();
     const printStatement = new StatementPrinter(logger, "en-US");
