@@ -90,7 +90,7 @@ describe("The World", () => {
       [Dead, Alive, Dead],
     ]);
 
-    const nextWorld = world.nextGeneration().nextGeneration().nextGeneration();
+    const nextWorld = world.nextGeneration().nextGeneration();
 
     expect(nextWorld).toEqual(world);
   });
