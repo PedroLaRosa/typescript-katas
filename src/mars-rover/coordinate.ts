@@ -2,8 +2,8 @@ class Coordinate {
   private static maxLatitude = 10;
   private static maxLongitude = 10;
   private constructor(
-    private readonly latitude: number,
-    private readonly longitude: number,
+    readonly latitude: number,
+    readonly longitude: number,
   ) {}
 
   static create(latitude: number, longitude: number) {
