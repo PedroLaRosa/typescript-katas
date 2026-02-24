@@ -24,17 +24,25 @@ class Rover {
   }
 
   runCommands(commands: string) {
-    commands.split("").forEach((command) => {
-      if (command === "L") {
-        this.navigator = this.navigator.left();
-        return;
-      }
-      if (command === "R") {
-        this.navigator = this.navigator.right();
-        return;
-      }
-      this.navigator = this.navigator.forward();
-    });
+    commands
+      .toUpperCase()
+      .split("")
+      .forEach((command) => {
+        if (command === "L") {
+          this.navigator = this.navigator.left();
+          return;
+        }
+        if (command === "R") {
+          this.navigator = this.navigator.right();
+          return;
+        }
+        if (command === "F") {
+          this.navigator = this.navigator.forward();
+          return;
+        }
+
+        throw new Error("Invalid command");
+      });
   }
 
   formattedPosition() {

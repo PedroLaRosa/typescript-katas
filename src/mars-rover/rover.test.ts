@@ -39,6 +39,11 @@ describe("Rover", () => {
       commands: "FFFRFF",
       newPosition: "1:1:S",
     },
+    {
+      initialPosition: "8:3:E",
+      commands: "FFfrFf",
+      newPosition: "1:1:S",
+    },
   ])(
     "Should navigate a rover from $initialPosition to $newPosition by following the commands $commands",
     ({ initialPosition, commands, newPosition }) => {
@@ -49,4 +54,11 @@ describe("Rover", () => {
       expect(rover.formattedPosition()).toBe(newPosition);
     },
   );
+
+  it("Should throw error when pass invalid commands", () => {
+    const rover = Rover.fromPosition("0:0:N");
+    expect(() => {
+      rover.runCommands("FRDD");
+    }).toThrowError("Invalid command");
+  });
 });
