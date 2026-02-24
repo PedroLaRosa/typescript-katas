@@ -9,19 +9,13 @@ import {
 import { Coordinate } from "./coordinate.js";
 
 type Orientation = "N" | "S" | "E" | "W";
+type Position = `${number}:${number}:${Orientation}`;
 
 class Rover {
   private constructor(private navigator: Navigator) {}
 
-  static fromPosition(position: `${number}:${number}:${Orientation}`) {
-    const parsedPosition = position.split(":");
-    const latitude = Number(parsedPosition[0]);
-    const longitude = Number(parsedPosition[1]);
-    const orientation = parsedPosition[2];
-
-    if (orientation === undefined) {
-      throw new Error("Invalid position");
-    }
+  static fromPosition(position: Position) {
+    const { latitude, longitude, orientation } = Rover.parsePosition(position);
 
     const coordinate = Coordinate.create(latitude, longitude);
     const navigator = Rover.navigatorBasedOnOrientation(
@@ -50,6 +44,25 @@ class Rover {
     return this.navigator.formattedPosition();
   }
 
+  private static parsePosition(position: Position) {
+    const [rawLatitude, rawLongitude, rawOrientation] = position.split(":");
+    const latitude = Number(rawLatitude);
+    const longitude = Number(rawLongitude);
+    const orientation = rawOrientation ?? "";
+    const isLongitudeValid = !isNaN(longitude) && longitude >= 0;
+    const isLatitudeValid = !isNaN(latitude) && latitude >= 0;
+    const isPositionValid =
+      isLatitudeValid &&
+      isLongitudeValid &&
+      Rover.isOrientationValid(orientation);
+    if (!isPositionValid) {
+      throw new Error(
+        "Invalid position. coordinate must be a positive numbers and the orientation must be a valid cardinal point; N, S, E or W",
+      );
+    }
+    return { latitude, longitude, orientation };
+  }
+
   private static navigatorBasedOnOrientation(
     orientation: string,
     coordinate: Coordinate,
@@ -66,18 +79,67 @@ class Rover {
   private static assertOrientationIsValid(
     orientation: string,
   ): asserts orientation is Orientation {
-    if (!["N", "S", "E", "W"].includes(orientation)) {
+    if (!Rover.isOrientationValid(orientation)) {
       throw new Error("Invalid orientation");
     }
+  }
+
+  private static isOrientationValid(
+    orientation: string,
+  ): orientation is Orientation {
+    if (["N", "S", "E", "W"].includes(orientation)) {
+      return true;
+    }
+    return false;
   }
 }
 
 describe("Rover", () => {
-  it("Should create with initial position", () => {
-    const rover = Rover.fromPosition("0:0:N");
+  it.each([
+    { invalidPosition: "0:" },
+    { invalidPosition: "0:0:" },
+    {
+      invalidPosition: "0:0:F",
+    },
+    {
+      invalidPosition: "",
+    },
+    {
+      invalidPosition: "-1:0:S",
+    },
+  ])(
+    "Should throw error when pass $invalidPosition as position",
+    ({ invalidPosition }) => {
+      // @ts-expect-error
+      expect(() => Rover.fromPosition(invalidPosition)).toThrowError(
+        "Invalid position. coordinate must be a positive numbers and the orientation must be a valid cardinal point; N, S, E or W",
+      );
+    },
+  );
 
-    rover.runCommands("LFRFF");
+  it.each<{
+    initialPosition: Position;
+    commands: string;
+    newPosition: Position;
+  }>([
+    {
+      initialPosition: "0:0:N",
+      commands: "LFRFF",
+      newPosition: "9:2:N",
+    },
+    {
+      initialPosition: "8:3:E",
+      commands: "FFFRFF",
+      newPosition: "1:1:S",
+    },
+  ])(
+    "Should navigate a rover from $initialPosition to $newPosition by following the commands $commands",
+    ({ initialPosition, commands, newPosition }) => {
+      const rover = Rover.fromPosition(initialPosition);
 
-    expect(rover.formattedPosition()).toBe("9:2:N");
-  });
+      rover.runCommands(commands);
+
+      expect(rover.formattedPosition()).toBe(newPosition);
+    },
+  );
 });
