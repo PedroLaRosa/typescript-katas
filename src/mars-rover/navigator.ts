@@ -1,14 +1,17 @@
 import { Coordinate } from "./coordinate.js";
 
-interface Navigator {
-  left(): Navigator;
-  right(): Navigator;
-  forward(): Navigator;
-  currentPosition(): Coordinate;
-  formattedPosition(): string;
-}
+/*
+ * Navigator can be exclusively one of the following types
+ * Since there are only 4 options, we can use a union type to represent them instead of an interface
+ *The intention is to keep the type closed to only the possible options
+ * */
+type Navigator =
+  | NavigatorFacingNorth
+  | NavigatorFacingSouth
+  | NavigatorFacingEast
+  | NavigatorFacingWest;
 
-class NavigatorFacingNorth implements Navigator {
+class NavigatorFacingNorth {
   constructor(private readonly coordinate: Coordinate) {}
 
   currentPosition(): Coordinate {
@@ -33,7 +36,7 @@ class NavigatorFacingNorth implements Navigator {
   }
 }
 
-class NavigatorFacingWest implements Navigator {
+class NavigatorFacingWest {
   constructor(private readonly coordinate: Coordinate) {}
 
   currentPosition(): Coordinate {
@@ -58,7 +61,7 @@ class NavigatorFacingWest implements Navigator {
   }
 }
 
-class NavigatorFacingEast implements Navigator {
+class NavigatorFacingEast {
   constructor(private readonly coordinate: Coordinate) {}
 
   currentPosition(): Coordinate {
@@ -83,7 +86,7 @@ class NavigatorFacingEast implements Navigator {
   }
 }
 
-class NavigatorFacingSouth implements Navigator {
+class NavigatorFacingSouth {
   constructor(private readonly coordinate: Coordinate) {}
 
   currentPosition(): Coordinate {
