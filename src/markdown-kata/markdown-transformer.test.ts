@@ -4,7 +4,12 @@ class MarkdownTransformer {
   constructor(readonly markdownText: string) {}
 
   transform() {
-    return this.markdownText;
+    const links = this.findAllLinks();
+    const linkRecord = this.generateLinkRecord(links);
+    const transformedMarkdown = this.replaceLinksByAnchor(linkRecord);
+    const footNotes = this.createFootNotes(linkRecord);
+
+    return this.appendFootnotesToMarkDown(transformedMarkdown, footNotes);
   }
 
   findAllLinks() {
@@ -84,7 +89,16 @@ describe("The Markdown Transformer", () => {
     const markdownText = "[Visible text link](url)";
     const transformedText = new MarkdownTransformer(markdownText).transform();
     expect(transformedText).toBe(
-      "Visible text link [^anchor] \n\n [^anchor1]: url",
+      "Visible text link [^anchor]\n\n[^anchor1]: url",
+    );
+  });
+
+  it("should transform a given markdown text that contains two links", () => {
+    const markdownText =
+      "blah blah blah... [Visible text link](url) blah blah [this is a link](other-url)";
+    const transformedText = new MarkdownTransformer(markdownText).transform();
+    expect(transformedText).toBe(
+      "blah blah blah... Visible text link [^anchor] blah blah this is a link [^anchor]\n\n[^anchor1]: url\n\n[^anchor2]: other-url",
     );
   });
 });
