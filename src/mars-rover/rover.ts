@@ -10,8 +10,16 @@ import { Coordinate } from "./coordinate.js";
 type Orientation = "N" | "S" | "E" | "W";
 type Position = `${number}:${number}:${Orientation}`;
 
+const Command = {
+  Left: "left",
+  Right: "right",
+  Forward: "forward",
+} as const;
+
+type Command = keyof typeof Command;
+
 class Rover {
-  private constructor(private navigator: Navigator) {}
+  constructor(private navigator: Navigator) {}
 
   static fromPosition(position: Position) {
     const { latitude, longitude, orientation } = Rover.parsePosition(position);
@@ -24,29 +32,23 @@ class Rover {
   }
 
   runCommands(commands: string) {
-    commands
-      .toUpperCase()
-      .split("")
-      .forEach((command) => {
-        if (command === "L") {
-          this.navigator = this.navigator.left();
-          return;
-        }
-        if (command === "R") {
-          this.navigator = this.navigator.right();
-          return;
-        }
-        if (command === "F") {
-          this.navigator = this.navigator.forward();
-          return;
-        }
-
-        throw new Error("Invalid command");
-      });
+    commands.toUpperCase().split("").forEach(this.runSingleCommand.bind(this));
   }
 
   formattedPosition() {
     return this.navigator.formattedPosition();
+  }
+
+  private runSingleCommand(rawCommand: string) {
+    const command = this.transformRawCommandToCommand(rawCommand);
+    this.navigator = this.navigator[command]();
+  }
+
+  private transformRawCommandToCommand(rawCommand: string) {
+    if (rawCommand === "L") return Command.Left;
+    if (rawCommand === "R") return Command.Right;
+    if (rawCommand === "F") return Command.Forward;
+    throw new Error("Invalid command");
   }
 
   private static parsePosition(position: Position) {

@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Rover, type Position } from "./rover.js";
+import { NavigatorFacingNorth } from "./navigator.js";
+import { Coordinate } from "./coordinate.js";
 
 describe("Rover", () => {
   it.each([
@@ -23,6 +25,16 @@ describe("Rover", () => {
       );
     },
   );
+
+  it("Should initialize the rover with a navigator", () => {
+    const coordinate = Coordinate.create(0, 0);
+    const navigator = new NavigatorFacingNorth(coordinate);
+    const rover = new Rover(navigator);
+
+    rover.runCommands("LFRFF");
+
+    expect(rover.formattedPosition()).toBe("9:2:N");
+  });
 
   it.each<{
     initialPosition: Position;
